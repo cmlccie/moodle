@@ -1,0 +1,31 @@
+# Docker Compose file for jhardison/moodle
+# See https://hub.docker.com/r/jhardison/moodle/
+
+# docker run -d --name DB -p 3306:3306 -e MYSQL_DATABASE=moodle -e MYSQL_ROOT_PASSWORD=moodle -e MYSQL_USER=moodle -e MYSQL_PASSWORD=moodle mysql
+# docker run -d -P --name moodle --link DB:DB -e MOODLE_URL=http://192.168.59.103:8080 -p 8080:80 jhardison/moodle
+
+version: '2'
+services:
+  DB:
+    image: "mysql:latest"
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=moodle
+      - MYSQL_ROOT_PASSWORD=moodle
+      - MYSQL_USER=moodle
+      - MYSQL_PASSWORD=moodle
+    volumes:
+      - ./data:/var/lib/mysql
+  moodle:
+    image: "jhardison/moodle:latest"
+    ports:
+      - "8080:80"
+    environment:
+      - DB_PORT_3306_TCP_ADDR=DB
+      - DB_ENV_MYSQL_DATABASE=moodle
+      - DB_ENV_MYSQL_USER=moodle
+      - DB_ENV_MYSQL_PASSWORD=moodle
+      - MOODLE_URL=http://localhost:8080
+    links:
+      - DB
