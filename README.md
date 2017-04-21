@@ -9,7 +9,8 @@ Quick setup to test out [Moodle](https://moodle.org/) on a local workstation.
 
 ## Setup
 ``` bash
-
+git clone https://github.com/cmlccie/moodle.git
+cd moodle
 make init
 ```
 
